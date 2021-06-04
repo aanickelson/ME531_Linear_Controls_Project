@@ -15,9 +15,7 @@ def create_a_nn():
 
 def train_the_nn(data_in, data_out):
     weights_path = 'weights-{}'.format(time.strftime("%Y%m%d-%H%M%S"))
-    # cp_callback = tf.keras.callbacks.ModelCheckpoint(filepath=weights_path,
-    #                                                  save_weights_only=True,
-    #                                                  verbose=1)
+
     model = create_a_nn()
     model.fit(data_in, data_out, epochs=5)  #, callbacks=[cp_callback])
     model.save_weights(weights_path)
@@ -32,7 +30,6 @@ def use_trained_nn(weights_file):
 if __name__ == "__main__":
 
     all_data = np.load("cart-pole-data-20210521-123946.npy")
-    print(all_data)
 
     # inputs = all_data[:, :4]
     all_out = all_data[:, 4:]

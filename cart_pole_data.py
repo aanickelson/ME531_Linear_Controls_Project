@@ -59,12 +59,16 @@ def use_nn_for_cartpole(network, episodes):
     env = gym.make('CartPole-v0')
 
     final_times = []
+    all_data = []
+    # all_data = np.array([])
     for episode in range(episodes):
+        episode_data = []
         observation = env.reset()
         observation = np.reshape(observation, (1, 4))
-
-        if not episode % 100:
-            print("Episode ", episode)
+        episode_data.append(observation.tolist()[0])
+        # np.append(all_data, observation)
+        # if not episode % 100:
+        print("Episode ", episode)
             # try:
             #     print("Average time:", mean(final_times))
             # except:
@@ -80,21 +84,25 @@ def use_nn_for_cartpole(network, episodes):
 
             observation, reward, done, info = env.step(action)  # take a random action
             observation = np.reshape(observation, (1, 4))
+            episode_data.append(observation.tolist()[0])
+            # np.append(all_data, observation)
 
             if done:
                 # print("Network achieved {} time steps".format(t+1))
                 final_times.append(t+1)
+                all_data.append(episode_data)
                 break
         env.close()
-
-    print("Average time:", mean(final_times))
-    # np.save('cart-pole-data-{}'.format(time.strftime("%Y%m%d-%H%M%S")), all_data)
+    all_data = np.array(all_data)
+    # print(all_data)
+    # print("Average time:", mean(final_times))
+    np.save('cart-pole-data-{}'.format(time.strftime("%Y%m%d-%H%M%S")), all_data)
 
 
 def test_nn():
-    nn_weights_file = "weights-20210521-124015"
+    nn_weights_file = "weights-20210603-164450"
     network = use_trained_nn(nn_weights_file)
-    use_nn_for_cartpole(network, 100)
+    use_nn_for_cartpole(network, 30)
 
 
 if __name__ == "__main__":
